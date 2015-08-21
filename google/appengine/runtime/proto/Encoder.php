@@ -16,9 +16,6 @@
  */
 namespace google\net;
 
-require_once 'google/appengine/runtime/proto/Decoder.php';
-require_once 'google/appengine/runtime/proto/ProtocolBufferEncodeError.php';
-
 /**
  * Class to encode protocol buffer into serialized form. Used by protocol
  * buffer implementation.
