@@ -9,6 +9,7 @@ namespace google\appengine\runtime;
 
 final class ClassLoader {
   private static $classmap = null;
+  private static $sdk_root = null;
 
   public static function loadClass($class_name) {
     if (self::$classmap === null) {
@@ -544,10 +545,18 @@ final class ClassLoader {
         'google\appengine\api\app_identity\appidentityservice' => 'google/appengine/api/app_identity/AppIdentityService.php',
         'google\appengine\api\app_identity\appidentityexception' => 'google/appengine/api/app_identity/AppIdentityException.php',
       ];
+      $base_dir = dirname(__FILE__);
+      self::$sdk_root = dirname(dirname(dirname($base_dir))) . DIRECTORY_SEPARATOR;
     }
     $class_name = strtolower($class_name);
     if (array_key_exists($class_name, self::$classmap)) {
-      require self::$classmap[$class_name];
+      $target_file = self::$classmap[$class_name];
+      $full_path = self::$sdk_root . $target_file;
+      if (file_exists($full_path)) {
+        require $full_path;
+      } else {
+        require $target_file;
+      }
     }
   }
 }
